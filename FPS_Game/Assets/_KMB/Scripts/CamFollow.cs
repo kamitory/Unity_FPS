@@ -11,7 +11,7 @@ public class CamFollow : MonoBehaviour
     //현재는 눈역할이라 바로 이동
     
     public Transform target; //카메라가 따라다닐 타겟(플레이어)
-    public float followSpeed = 10.0f;
+    public float followSpeed = 20.0f;
     private bool view = false;
 
     public Transform targer2;
