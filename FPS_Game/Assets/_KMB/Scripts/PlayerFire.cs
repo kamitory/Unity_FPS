@@ -43,8 +43,13 @@ public class PlayerFire : MonoBehaviour
             RaycastHit hitInfo;
             if(Physics.Raycast(ray, out hitInfo))
             {
+        
                 Debug.Log(hitInfo.transform.name);
 
+                EnemeFSM enemy = hitInfo.collider.GetComponent<EnemeFSM>();
+                enemy.hitDamage(10);
+                //hitInfo.collider.gameObject.GetComponent<EnemeFSM>().hitDamage(10);
+                //hitInfo.transform.GetComponent<EnemeFSM>().hitDamage(10);
                 //충돌지점에 이펙트
                 GameObject bulletImpact = Instantiate(bulletImpactFactory);
                 //부딪힌지점 힛인포안에 정보가있음

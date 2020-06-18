@@ -64,7 +64,7 @@ public class PlayerMove : MonoBehaviour
             velocityY = 0;
             jumpCount = 0;
         }
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && jumpCount < maxJump)
         {
             velocityY = jumpPower;
             jumpCount++;
