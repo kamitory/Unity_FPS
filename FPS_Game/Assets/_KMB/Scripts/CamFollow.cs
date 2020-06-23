@@ -61,7 +61,7 @@ public class CamFollow : MonoBehaviour
 
         
             //문제점 : 타겟에 도착하면 떨림    ~~카메라 쉐이킹이라고 우기자~~
-            if (Vector3.Distance(transform.position, targetPos) < 1.0f)
+            if (Vector3.Distance(transform.position, targetPos) < 3.0f)
             {
                 transform.position = targetPos;
 

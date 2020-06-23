@@ -41,9 +41,11 @@ public class EnemeFSM : MonoBehaviour
     public float moveRange = 30f;   //시작지점에서 최대이동가능지점
     public float attackRange = 2f;  //공격가능범위
     Vector3 defaultLocation;//몬스터 시작위치
-
+    //Quaternion defaultRotation;
     Transform player; //플레이어 찾기위해( 코드로찾자 드래그앤드랍 일일히 하기힘듬)
     CharacterController cc; //몬스터이동을 위해 캐릭터 컨트롤러
+
+    Animator anim;
 
     int hp = 100;       //체력
     int att = 5;        //공격력
@@ -52,7 +54,6 @@ public class EnemeFSM : MonoBehaviour
     //공격딜레이
     float attTime = 2f; //2초에한번공격
     float timer = 0f;   //타이머
-    
 
 
 
@@ -70,10 +71,13 @@ public class EnemeFSM : MonoBehaviour
         state = EnemyState.Idle;
         //시작지점 저장
         defaultLocation = transform.position;
+        //defaultRotation = transform.rotation;
         //플레이어 트렌스폼 컴포넌트
         player = GameObject.Find("Player").transform;
         //캐릭터 컨트롤러 컴포넌트
         cc = GetComponent<CharacterController>();
+        //애니메이터 컴포넌트
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -131,6 +135,9 @@ public class EnemeFSM : MonoBehaviour
         {
             state = EnemyState.Move;
             print("상태전환 : Idle -> Move");
+
+            //애니메이션
+            anim.SetTrigger("Move");
         }
 
         //- 상태전환 출력
@@ -149,6 +156,11 @@ public class EnemeFSM : MonoBehaviour
         {
             state = EnemyState.Return;
             print("상태전환 : Move -> Return");
+
+            //애니메이션
+            anim.SetTrigger("Return");
+
+
         }
         else if ( Vector3.Distance(transform.position, player.position)>attackRange)
         {
@@ -185,6 +197,7 @@ public class EnemeFSM : MonoBehaviour
         {
             state = EnemyState.Attack;
             print("상태전환 : Move -> Attack");
+            anim.SetTrigger("Attack");
         }
 
 
@@ -235,12 +248,14 @@ public class EnemeFSM : MonoBehaviour
 
                 //타이머초기화
                 timer = 0f;
+                anim.SetTrigger("Attack");
             }
         }
         else // 공격범위 벗어나면 추격으로 상태전환 (재추격)
         {
             state = EnemyState.Move;
             print("상태전환 : Attack -> Move");
+            anim.SetTrigger("Move");
 
             //타이머초기화
             timer = 0f;
@@ -268,14 +283,17 @@ public class EnemeFSM : MonoBehaviour
         if(Vector3.Distance(transform.position, defaultLocation) >0.1f)
         {
             Vector3 dir = (defaultLocation - transform.position).normalized;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
             cc.SimpleMove(dir * speed);    
         }
         else
         {
             transform.position = defaultLocation;
-
+            transform.rotation = Quaternion.identity;//defaultRotation;
             state = EnemyState.Idle;
             print("상태전환 : Return -> Idle");
+            //애니메이션
+            anim.SetTrigger("Idle");
         }
 
 
@@ -312,7 +330,7 @@ public class EnemeFSM : MonoBehaviour
             state = EnemyState.Damaged;
             print("상태전환 : AnyState -> Damaged");
             print(" HP : " + hp);
-
+            anim.SetTrigger("Damaged");
             Damaged();
         }
         //0이하면사망
@@ -320,7 +338,7 @@ public class EnemeFSM : MonoBehaviour
         {
             state = EnemyState.Die;
             print("상태전환 : AnyState -> Die");
-
+            anim.SetTrigger("Die");
             Die();
 
         }
