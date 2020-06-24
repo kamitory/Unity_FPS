@@ -47,7 +47,7 @@ public class PlayerFire : MonoBehaviour
                 Debug.Log(hitInfo.transform.name);
 
                 EnemeFSM enemy = hitInfo.collider.GetComponent<EnemeFSM>();
-                enemy.hitDamage(10);
+    
                 //hitInfo.collider.gameObject.GetComponent<EnemeFSM>().hitDamage(10);
                 //hitInfo.transform.GetComponent<EnemeFSM>().hitDamage(10);
                 //충돌지점에 이펙트

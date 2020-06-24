@@ -365,10 +365,11 @@ public class EnemeFSM : MonoBehaviour
     IEnumerator DamageProc()
     {
         //피격 모션 시간 만큼 기다리기
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         //현재상태를 이동으로 전환
         state = EnemyState.Move;
         print("상태전환 : Damaged -> Move");
+        anim.SetTrigger("Move");
     }
     
     //피격상태(Any State)
